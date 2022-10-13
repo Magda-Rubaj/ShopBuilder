@@ -1,6 +1,7 @@
 
 from dataclasses import dataclass
-from domain.repos import ProductRepository
+from domain.repos import AbstractProductRepository
+from domain.entities import Product
 
 
 @dataclass
@@ -11,5 +12,6 @@ class CreateProductCommand:
     stock: int
 
 
-def create_product(command: CreateProductCommand, repo: ProductRepository):
-    pass
+def create_product(command: CreateProductCommand, repo: AbstractProductRepository):
+    product = Product(**command.dict())
+    repo.insert(product)
