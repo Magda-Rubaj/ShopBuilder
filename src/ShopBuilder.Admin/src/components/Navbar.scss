@@ -1,0 +1,42 @@
+.navbar {
+  background: #00374F;
+  padding: 2em;
+
+  &__burger {
+    cursor: pointer;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__options {
+    margin-top: 2em;
+  }
+
+  &__options .navbar-option {
+    margin-bottom: 3em;
+  }
+}
+
+
+.navbar-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__label {
+    display: flex;
+    align-items: center;
+  }
+
+  &__head {
+    margin-left: 1.5em;
+    text-transform: uppercase;
+    color: #F3F3F3;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+  }
+}
