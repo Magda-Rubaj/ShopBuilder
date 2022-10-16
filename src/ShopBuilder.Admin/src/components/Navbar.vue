@@ -2,15 +2,19 @@
   <nav class="navbar">
     <div class="navbar__head">
       <div @click="toggleBurger" class="navbar__burger">
-        <svg  width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg v-if="active" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 16H28" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4 8H28" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4 24H28" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+        <svg v-else width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24.5212 8.05151L8.52124 24.0515" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.52124 8.05151L24.5212 24.0515" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <div></div>
     </div>
-    <div v-if="active" class="navbar__options">
+    <div class="navbar__options" :class="{'navbar__options--hidden' : active}">
       <div class="navbar-option">
         <div class="navbar-option__head">
           <div class="navbar-option__label">

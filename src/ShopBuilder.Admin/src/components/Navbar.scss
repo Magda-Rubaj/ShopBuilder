@@ -1,5 +1,10 @@
 .navbar {
+  top: 0;
+  &--unfolded {
+    bottom: 0;
+  }
   position: fixed;
+  overflow-y: auto;
   width: 100%;
   background: #00374F;
 
@@ -16,6 +21,28 @@
 
   &__options {
     margin-top: 2em;
+
+    &--hidden {
+      display: none;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .navbar {
+    width: 300px;
+    height: 100%;
+
+    &__burger {
+      display: none;
+    }
+
+    &__options {
+      &--hidden {
+        display: block;
+      }
+    }
+    
   }
 }
 
@@ -63,8 +90,6 @@
     color: #F3F3F3;
     font-weight: 400;
     font-family: 'Ubuntu', sans-serif;
-    overflow-y: hidden;
-
     &--unfolded {
       display: block;
     }
@@ -81,7 +106,6 @@
 
   &__suboption {
     cursor: pointer;
-    height: 100%;
     position: relative;
     left: 1em;
     margin: 2em;
