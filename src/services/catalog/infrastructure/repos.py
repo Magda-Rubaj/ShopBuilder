@@ -11,4 +11,4 @@ class ProductRepository(AbstractProductRepository):
         self._session = session
 
     def insert(self, entity: Entity):
-        self.session.add(entity)
+        self._session.add(entity)
