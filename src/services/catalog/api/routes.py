@@ -3,6 +3,7 @@ from application.commands import CreateProductCommand, create_product
 from infrastructure.repos import ProductRepository
 from config.db import get_session
 
+
 product_blueprint = Blueprint("product_blueprint", __name__)
 
 
