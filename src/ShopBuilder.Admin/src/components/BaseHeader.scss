@@ -1,0 +1,23 @@
+.base-header {
+  display: inline-block;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  font-size: 2.5em;
+  line-height: 3em;
+  color: #00374F;
+  position: relative;
+
+  text-transform: uppercase;
+
+  &::after {
+    position: absolute;
+    content: '';
+
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 0.5em;
+    background: #13B799;
+
+  }
+}
