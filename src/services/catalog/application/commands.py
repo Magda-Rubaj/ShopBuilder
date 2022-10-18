@@ -1,7 +1,7 @@
-
 from dataclasses import dataclass, asdict
 from domain.repos import AbstractProductRepository, Repository
 from domain.entities import Product
+
 
 @dataclass
 class Command:
@@ -27,4 +27,4 @@ class CommandMapper:
 
     def execute_command(self, command: Command, repository: Repository):
         handler = self.handlers.get(type(command))
-        return handler(repository)
+        return handler(command, repository)
