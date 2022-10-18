@@ -9,3 +9,4 @@ class ProductRepository(AbstractProductRepository):
 
     def insert(self, entity: Entity):
         self._session.add(entity)
+        self._session.commit()

@@ -13,6 +13,6 @@ def add_product(
     command_mapper: CommandMapper = Provide[Container.command_mapper],
     repo: ProductRepository = Provide[Container.product_repository],
 ):
-    command = CreateProductCommand(**request.data)
+    command = CreateProductCommand(**request.json)
     command_mapper.execute_command(command, repo)
     return "OK", 201

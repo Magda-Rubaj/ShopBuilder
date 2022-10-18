@@ -17,7 +17,8 @@ def get_session() -> Session:
     session = Session()
     try:
         return session
-    except:
+    except Exception:
+        print(Exception)
         session.rollback()
     finally:
         session.close()
