@@ -10,3 +10,9 @@ class AbstractProductRepository(Repository):
     @abstractmethod
     def insert(self, entity: Entity):
         ...
+
+
+class AbstractCategoryRepository(Repository):
+    @abstractmethod
+    def insert(self, entity: Entity):
+        ...

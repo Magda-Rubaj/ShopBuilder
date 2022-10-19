@@ -1,4 +1,5 @@
 from sqlalchemy import (
+    ForeignKey,
     Table,
     MetaData,
     Column,
@@ -6,7 +7,7 @@ from sqlalchemy import (
     String,
     Float
 )
-from domain.entities import Product
+from domain.entities import Product, Category
 from sqlalchemy.orm import mapper
 
 metadata = MetaData()
@@ -21,5 +22,17 @@ products = Table(
     Column("description", String(256)),
 )
 
+
+categories = Table(
+    "categories",
+    metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("name", String(64)),
+    Column("parent", ForeignKey("categories.id")),
+    Column("level", Integer),
+)
+
+
 def begin_mapping():
     mapper(Product, products)
+    mapper(Category, categories)
