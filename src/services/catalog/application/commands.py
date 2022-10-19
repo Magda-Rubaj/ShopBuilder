@@ -15,7 +15,7 @@ class Command:
 @dataclass
 class CreateCategoryCommand(Command):
     name: str
-    parent: int
+    parent: int | None = None
 
 
 def create_category(command: CreateCategoryCommand, repo: AbstractCategoryRepository):

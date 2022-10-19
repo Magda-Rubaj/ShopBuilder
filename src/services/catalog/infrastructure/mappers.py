@@ -10,7 +10,9 @@ from sqlalchemy import (
 from domain.entities import Product, Category
 from sqlalchemy.orm import mapper
 
+
 metadata = MetaData()
+
 
 products = Table(
     "products",
