@@ -54,7 +54,9 @@
           </svg>
         </div>
         <ul class="navbar-option__content" :class="{ 'navbar-option__content--unfolded': catalogActive }">
-          <li class="navbar-option__suboption">Products</li>
+          <li class="navbar-option__suboption">
+            <router-link to="/">Products</router-link>
+          </li>
           <li class="navbar-option__suboption">Categories</li>
           <li class="navbar-option__suboption">Discounts</li>
         </ul>
