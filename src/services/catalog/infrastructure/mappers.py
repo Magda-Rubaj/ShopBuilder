@@ -5,10 +5,11 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    Float
+    Float,
 )
 from domain.entities import Product, Category
 from sqlalchemy.orm import mapper
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 metadata = MetaData()
@@ -19,9 +20,10 @@ products = Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("name", String(64)),
-    Column("price", Float),
+    Column("price", JSONB),
     Column("stock", Integer),
     Column("description", String(256)),
+    Column("category", ForeignKey("categories.id")),
 )
 
 

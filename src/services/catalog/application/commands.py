@@ -5,6 +5,7 @@ from domain.repos import (
     Repository,
 )
 from domain.entities import Category, Product
+from domain.value_objects import Price
 
 
 @dataclass
@@ -27,10 +28,15 @@ def create_category(command: CreateCategoryCommand, repo: AbstractCategoryReposi
 @dataclass
 class CreateProductCommand(Command):
     name: str
-    price: float
+    price: Price
     image: str
     stock: int
     description: str
+    category: int
+
+    def __post_init__(self):
+        if isinstance(self.price, dict):
+            self.bar = Price(**self.price)
 
 
 def create_product(command: CreateProductCommand, repo: AbstractProductRepository):
