@@ -8,7 +8,6 @@ class ProductRepository(AbstractProductRepository):
         self._session = session
 
     def insert(self, entity: Product):
-        entity.convert_vo_to_dicts()
         self._session.add(entity)
         self._session.commit()
 

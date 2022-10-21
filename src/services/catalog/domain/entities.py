@@ -30,10 +30,4 @@ class Product(Entity):
     description: str
     category: Category
 
-    def convert_vo_to_dicts(self):
-        """converts fields that are value objects to dict"""
-        for field in fields(self):
-            if not isinstance(field, ValueObject):
-                continue
-            field = asdict(field)
 
