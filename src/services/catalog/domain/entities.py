@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import asdict, dataclass, fields
 from domain.value_objects import Price, ValueObject
+from services.catalog.domain.events import ProductCreated
 
 
 
@@ -29,5 +30,8 @@ class Product(Entity):
     stock: int
     description: str
     category: Category
+
+    def create_product(self):
+        return [ProductCreated(name=self.name, price=self.price)]
 
 
