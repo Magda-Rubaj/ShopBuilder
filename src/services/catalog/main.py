@@ -12,3 +12,6 @@ app.register_blueprint(product_blueprint)
 app.register_blueprint(category_blueprint)
 
 begin_mapping()
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

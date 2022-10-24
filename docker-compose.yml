@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  catalog:
+    network_mode: host
+    build:
+      context: ./src/services/catalog
+      dockerfile: Dockerfile
+    command: python main.py
+    working_dir: /usr/bin/catalog
+    environment:   
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    #hostname: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672

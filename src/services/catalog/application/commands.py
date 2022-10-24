@@ -6,6 +6,7 @@ from domain.repos import (
 )
 from domain.entities import Category, Product
 from domain.value_objects import Price
+from domain.broker import EventPublisher
 
 
 @dataclass
@@ -36,20 +37,28 @@ class CreateProductCommand(Command):
 
     def __post_init__(self):
         if isinstance(self.price, dict):
-            self.bar = Price(**self.price)
+            self.price = Price(**self.price)
 
 
-def create_product(command: CreateProductCommand, repo: AbstractProductRepository):
+def create_product(
+    command: CreateProductCommand,
+    repo: AbstractProductRepository,
+    publisher: EventPublisher,
+):
     product = Product(**asdict(command))
+    events = product.create_product()
     repo.insert(product)
+    publisher.publish(events)
 
 
 class CommandMapper:
     handlers = {
         CreateProductCommand: create_product,
-        CreateCategoryCommand: create_category
+        CreateCategoryCommand: create_category,
     }
 
-    def execute_command(self, command: Command, repository: Repository):
+    def execute_command(
+        self, command: Command, repository: Repository, publisher: EventPublisher = None
+    ):
         handler = self.handlers.get(type(command))
-        return handler(command, repository)
+        return handler(command, repository, publisher)
