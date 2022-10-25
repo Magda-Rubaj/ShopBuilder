@@ -1,20 +1,38 @@
 version: '3'
 
 services:
+  catalog-db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - src/services/catalog/.env
+    environment:
+      - POSTGRES_DB=${DBNAME}
+      - POSTGRES_USER=${DBUSER}
+      - POSTGRES_PASSWORD=${DBPASSWORD}
+
   catalog:
-    network_mode: host
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
+    env_file:
+      - src/services/catalog/.env
     command: python main.py
     working_dir: /usr/bin/catalog
+    restart: always
     environment:   
-      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      AMQP_URL: ${AMQP_URL}
+    links:
+      - rabbitmq
+      - catalog-db
     depends_on:
       - rabbitmq
+      - catalog-db
+  
   rabbitmq:
-    #hostname: rabbitmq
+    container_name: 'rabbitmq'
     image: rabbitmq:3-management-alpine
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672

@@ -4,6 +4,9 @@ from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, request
 from infrastructure.repos import CategoryRepository, ProductRepository
 from domain.broker import EventPublisher
+from domain.entities import Category
+from infrastructure.broker import RabbitMQEventPublisher
+from config.rabbitmq import prepare_channel
 
 
 product_blueprint = Blueprint("product_blueprint", __name__)
@@ -31,3 +34,12 @@ def add_category(
     command = CreateCategoryCommand(**request.json)
     command_mapper.execute_command(command, repo)
     return "OK", 201
+
+
+@product_blueprint.route("/products/test", methods=["POST"])
+@inject
+def test(command_mapper: CommandMapper = Provide[Container.command_mapper],
+    repo: CategoryRepository = Provide[Container.category_repository]):
+    publisher = RabbitMQEventPublisher(prepare_channel())
+    repo.insert(Category(name="dsdfsd"))
+    return "k"

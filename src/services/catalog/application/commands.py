@@ -48,7 +48,8 @@ def create_product(
     product = Product(**asdict(command))
     events = product.create_product()
     repo.insert(product)
-    publisher.publish(events)
+    print("CHANED")
+    publisher.publish(exchange="", events=events)
 
 
 class CommandMapper:
