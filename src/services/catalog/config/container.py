@@ -3,7 +3,7 @@ from infrastructure.repos import ProductRepository, CategoryRepository
 from application.commands import CommandMapper
 from config.db import get_session
 from config.rabbitmq import prepare_channel
-from infrastructure.broker import RabbitMQEventPublisher
+from integration.eventbus import RabbitMQEventBus
 
 
 class Container(containers.DeclarativeContainer):
@@ -21,5 +21,5 @@ class Container(containers.DeclarativeContainer):
         CategoryRepository, session=session
     )
     rabbit_publisher = providers.Factory(
-        RabbitMQEventPublisher, channel=rabbit_channel
+        RabbitMQEventBus, channel=rabbit_channel
     )

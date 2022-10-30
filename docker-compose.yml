@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=${DBNAME}
       - POSTGRES_USER=${DBUSER}
       - POSTGRES_PASSWORD=${DBPASSWORD}
+    logging:
+      driver: none
 
   catalog:
     build:
@@ -29,6 +31,23 @@ services:
     depends_on:
       - rabbitmq
       - catalog-db
+    
+  orders:
+    build:
+      context: ./src/services/orders
+      dockerfile: Dockerfile
+    env_file:
+      - src/services/orders/.env
+    command: python main.py
+    working_dir: /usr/bin/orders
+    restart: always
+    environment:   
+      AMQP_URL: ${AMQP_URL}
+    links:
+      - rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_started
   
   rabbitmq:
     container_name: 'rabbitmq'

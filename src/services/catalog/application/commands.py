@@ -6,7 +6,8 @@ from domain.repos import (
 )
 from domain.entities import Category, Product
 from domain.value_objects import Price
-from domain.broker import EventPublisher
+from integration.eventbus import EventBus
+from integration.events import ProductCreated
 
 
 @dataclass
@@ -43,13 +44,12 @@ class CreateProductCommand(Command):
 def create_product(
     command: CreateProductCommand,
     repo: AbstractProductRepository,
-    publisher: EventPublisher,
+    publisher: EventBus,
 ):
     product = Product(**asdict(command))
-    events = product.create_product()
-    repo.insert(product)
-    print("CHANED")
-    publisher.publish(exchange="", events=events)
+    event = ProductCreated(name=product.name, price=product.price)
+    #repo.insert(product)
+    publisher.publish(event=event)
 
 
 class CommandMapper:
@@ -59,7 +59,7 @@ class CommandMapper:
     }
 
     def execute_command(
-        self, command: Command, repository: Repository, publisher: EventPublisher = None
+        self, command: Command, repository: Repository, publisher: EventBus = None
     ):
         handler = self.handlers.get(type(command))
         return handler(command, repository, publisher)
