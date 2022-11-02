@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 
-load_dotenv()
+print(os.environ.get("DBNAME"), os.environ.get("DBUSER"))
 db_name = os.environ.get("DBNAME")
 db_user = os.environ.get("DBUSER")
 db_password = os.environ.get("DBPASSWORD")

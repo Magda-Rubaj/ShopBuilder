@@ -5,6 +5,7 @@ from pika.adapters.blocking_connection import BlockingChannel
 
 
 def prepare_channel() -> BlockingChannel:
-    connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
+    url = pika.URLParameters(os.environ.get("AMQP_URL"))
+    connection = pika.BlockingConnection(url)
     channel = connection.channel()
     return channel

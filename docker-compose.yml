@@ -5,26 +5,31 @@ services:
     image: postgres:15-alpine
     ports:
       - "5432:5432"
-    env_file:
-      - src/services/catalog/.env
     environment:
-      - POSTGRES_DB=${DBNAME}
-      - POSTGRES_USER=${DBUSER}
-      - POSTGRES_PASSWORD=${DBPASSWORD}
-    logging:
-      driver: none
+      - POSTGRES_DB=${CATALOG_DBNAME}
+      - POSTGRES_USER=${CATALOG_DBUSER}
+      - POSTGRES_PASSWORD=${CATALOG_DBPASSWORD}
+    # logging:
+    #   driver: none
+    volumes: 
+      - catalog-db:/var/lib/postgresql/data
+    networks:
+      - sb
 
   catalog:
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
-    env_file:
-      - src/services/catalog/.env
     command: python main.py
     working_dir: /usr/bin/catalog
-    restart: always
-    environment:   
-      AMQP_URL: ${AMQP_URL}
+    restart: on-failure
+    environment:
+      - DBNAME=${CATALOG_DBNAME}
+      - DBUSER=${CATALOG_DBUSER}
+      - DBPASSWORD=${CATALOG_DBPASSWORD}
+      - AMQP_URL=${AMQP_URL}
+    networks:
+      - sb
     links:
       - rabbitmq
       - catalog-db
@@ -36,15 +41,16 @@ services:
     build:
       context: ./src/services/orders
       dockerfile: Dockerfile
-    env_file:
-      - src/services/orders/.env
     command: python main.py
     working_dir: /usr/bin/orders
-    restart: always
+    restart: on-failure
     environment:   
-      AMQP_URL: ${AMQP_URL}
+      - SECRET_KEY=${ORDERS_SECRET_KEY}
+      - AMQP_URL=${AMQP_URL}
     links:
       - rabbitmq
+    networks:
+      - sb
     depends_on:
       rabbitmq:
         condition: service_started
@@ -52,6 +58,17 @@ services:
   rabbitmq:
     container_name: 'rabbitmq'
     image: rabbitmq:3-management-alpine
+    networks:
+      - sb
     ports:
       - 5672:5672
       - 15672:15672
+
+
+volumes:
+  catalog-db:
+    driver: local
+
+networks:
+    sb:
+      driver: bridge

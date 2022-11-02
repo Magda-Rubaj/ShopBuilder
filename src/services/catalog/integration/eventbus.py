@@ -19,9 +19,8 @@ class RabbitMQEventBus:
         self.channel.basic_publish(
             exchange="",
             routing_key=name,
-            #routing_key=name,
             body=json.dumps(event)
         )
-            
+
 
 

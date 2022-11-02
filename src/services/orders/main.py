@@ -74,7 +74,7 @@ async def main():
     container.config.from_pydantic(config)
     container.wire(modules=[__name__])
     loop = asyncio.get_event_loop()
-    connection = await aio_pika.connect_robust("amqp://guest:guest@127.0.0.1/", loop=loop)
+    connection = await aio_pika.connect_robust(config.amqp_url, loop=loop)
     channel = await connection.channel()
     event_bus = container.event_bus(channel)
     asyncio.ensure_future(event_bus.subscribe(ProductCreated.__name__, container.product_created_handler()))

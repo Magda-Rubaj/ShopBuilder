@@ -21,7 +21,7 @@ class CreateCategoryCommand(Command):
     parent: int | None = None
 
 
-def create_category(command: CreateCategoryCommand, repo: AbstractCategoryRepository):
+def create_category(command: CreateCategoryCommand, repo: AbstractCategoryRepository, publisher):
     category = Category(**asdict(command))
     category.set_level()
     repo.insert(category)
@@ -48,7 +48,7 @@ def create_product(
 ):
     product = Product(**asdict(command))
     event = ProductCreated(name=product.name, price=product.price)
-    #repo.insert(product)
+    repo.insert(product)
     publisher.publish(event=event)
 
 
