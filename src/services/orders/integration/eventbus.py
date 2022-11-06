@@ -1,6 +1,7 @@
-from integration.events import IntegrationEvent
-from integration.event_handlers import EventHandler
 import aio_pika
+from config.logger import logger
+from integration.event_handlers import EventHandler
+
 
 
 class RabbitMQEventBus:
@@ -9,10 +10,11 @@ class RabbitMQEventBus:
 
     async def subscribe(self, event_name: str, handler: EventHandler):
         queue = await self.channel.declare_queue(event_name, auto_delete=False)
-        print(f"Subscription started for {event_name}")
+        logger.info(f"Subscription started for {event_name}")
         async with queue.iterator() as queue_iter:
             async for message in queue_iter:
                 async with message.process():
+                    logger.info(f"Message recived for {event_name}")
                     handler.handle(message.body)
 
                     if queue.name in message.body.decode():

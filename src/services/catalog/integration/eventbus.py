@@ -2,6 +2,7 @@ from abc import ABC
 from dataclasses import asdict
 from integration.events import IntegrationEvent
 import json
+from config.logger import logger
 
 
 class EventBus(ABC):
@@ -21,6 +22,7 @@ class RabbitMQEventBus:
             routing_key=name,
             body=json.dumps(event)
         )
+        logger.info(f"Event {name} published to rabbitmq")
 
 
 

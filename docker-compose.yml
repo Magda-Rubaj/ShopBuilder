@@ -9,8 +9,8 @@ services:
       - POSTGRES_DB=${CATALOG_DBNAME}
       - POSTGRES_USER=${CATALOG_DBUSER}
       - POSTGRES_PASSWORD=${CATALOG_DBPASSWORD}
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
     volumes: 
       - catalog-db:/var/lib/postgresql/data
     networks:
@@ -52,8 +52,8 @@ services:
     networks:
       - sb
     depends_on:
-      rabbitmq:
-        condition: service_started
+      - rabbitmq
+
   
   rabbitmq:
     container_name: 'rabbitmq'
