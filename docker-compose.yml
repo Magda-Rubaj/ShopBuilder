@@ -17,6 +17,7 @@ services:
       - sb
 
   catalog:
+    container_name: catalog
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
@@ -53,8 +54,26 @@ services:
       - sb
     depends_on:
       - rabbitmq
+    ports:
+      - "8888:8888"
 
-  
+  gateway:
+    build:
+      context: ./src/gateways
+      dockerfile: Dockerfile
+    command: python main.py
+    working_dir: /usr/bin/gateway
+    restart: on-failure
+    environment:   
+      - CATALOG_URL=${CATALOG_URL}
+    networks:
+      - sb
+    depends_on:
+      - catalog
+      - orders
+    ports:
+      - "8000:8000"
+
   rabbitmq:
     container_name: 'rabbitmq'
     image: rabbitmq:3-management-alpine

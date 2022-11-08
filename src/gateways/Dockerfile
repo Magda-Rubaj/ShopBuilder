@@ -1,0 +1,7 @@
+FROM python:3.10
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+WORKDIR /usr/bin/gateway
+COPY . .
+RUN pip3 install -r requirements.txt
+EXPOSE 8000
