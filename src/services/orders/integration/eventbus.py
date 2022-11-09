@@ -15,7 +15,8 @@ class RabbitMQEventBus:
             async for message in queue_iter:
                 async with message.process():
                     logger.info(f"Message recived for {event_name}")
-                    handler.handle(message.body)
+                    print(message.body)
+                    handler.handle(message.body.decode())
 
                     if queue.name in message.body.decode():
                         break

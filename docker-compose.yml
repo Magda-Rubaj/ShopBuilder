@@ -36,7 +36,19 @@ services:
     depends_on:
       - rabbitmq
       - catalog-db
-    
+
+  orders-db:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - orders-db:/data/db
+    networks:
+      - sb
+
   orders:
     build:
       context: ./src/services/orders
@@ -46,18 +58,24 @@ services:
     restart: on-failure
     environment:   
       - SECRET_KEY=${ORDERS_SECRET_KEY}
+      - DB_URL=${ORDERS_DB_URL}
+      - DB_NAME=${ORDERS_DB_NAME}
       - AMQP_URL=${AMQP_URL}
     links:
       - rabbitmq
+      - orders-db
     networks:
       - sb
     depends_on:
       - rabbitmq
+      - orders-db
 
   
   rabbitmq:
     container_name: 'rabbitmq'
     image: rabbitmq:3-management-alpine
+    logging:
+      driver: none
     networks:
       - sb
     ports:
@@ -67,6 +85,8 @@ services:
 
 volumes:
   catalog-db:
+    driver: local
+  orders-db:
     driver: local
 
 networks:
