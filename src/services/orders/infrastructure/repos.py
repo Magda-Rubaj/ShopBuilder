@@ -1,3 +1,4 @@
+from config.logger import logger
 from domain.repos import AbstractProductRepository
 from dataclasses import asdict
 from domain.entities import Product
@@ -10,3 +11,4 @@ class ProductRepository(AbstractProductRepository):
     def insert(self, entity: Product):
         entity = asdict(entity)
         self.collection.insert_one(entity)
+
