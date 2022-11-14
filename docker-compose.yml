@@ -17,6 +17,7 @@ services:
       - sb
 
   catalog:
+    container_name: catalog
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
@@ -84,9 +85,50 @@ services:
       - sb
     depends_on:
       - rabbitmq
-      - orders-db
+    ports:
+      - "8888:8888"
 
-  
+  basket-store:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - sb
+    
+  basket:
+    build:
+      context: ./src/services/basket
+      dockerfile: Dockerfile
+    command: python main.py
+    working_dir: /usr/bin/basket
+    restart: on-failure
+    links:
+      - rabbitmq
+      - basket-store
+    networks:
+      - sb
+    depends_on:
+      - rabbitmq
+    ports:
+      - "5555:5555"
+
+  gateway:
+    build:
+      context: ./src/gateways
+      dockerfile: Dockerfile
+    command: python main.py
+    working_dir: /usr/bin/gateway
+    restart: on-failure
+    environment:   
+      - CATALOG_URL=${CATALOG_URL}
+    networks:
+      - sb
+    depends_on:
+      - catalog
+      - orders
+    ports:
+      - "8000:8000"
+
   rabbitmq:
     container_name: 'rabbitmq'
     image: rabbitmq:3-management-alpine

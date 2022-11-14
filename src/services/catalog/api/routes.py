@@ -20,7 +20,7 @@ def add_product(
 ):
     command = CreateProductCommand(**request.json)
     command_mapper.execute_command(command, repo, publisher)
-    return "OK", 201
+    return {201: "OK"}
 
 
 @product_blueprint.route("/categories/create", methods=["POST"])
@@ -31,7 +31,7 @@ def add_category(
 ):
     command = CreateCategoryCommand(**request.json)
     command_mapper.execute_command(command, repo)
-    return "OK", 201
+    return {201: "OK"}
 
 
 # @product_blueprint.route("/products/test", methods=["POST"])

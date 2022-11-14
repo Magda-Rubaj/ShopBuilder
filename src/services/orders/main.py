@@ -12,9 +12,8 @@ from integration.events import ProductCreated
 
 
 config = AppConfig()
-app = FastAPI(docs_url="/api/docs", openapi_url="/api", redoc_url="/redoc")
+app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=config.secret_key)
-app.include_router(test_router, prefix="/api", tags=["test"])
 
 @app.on_event('startup')    
 async def main():
