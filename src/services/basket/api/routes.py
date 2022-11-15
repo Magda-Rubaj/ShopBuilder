@@ -20,6 +20,6 @@ async def add_item(
     body: Dict,
     service = Depends(Provide[Container.basket_service])
 ):
-    service.add_to_basket(body)
+    await service.add_to_basket(body)
 
 

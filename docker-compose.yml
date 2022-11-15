@@ -101,6 +101,8 @@ services:
       dockerfile: Dockerfile
     command: python main.py
     working_dir: /usr/bin/basket
+    environment:   
+      - REDIS_URL=${BASKET_REDIS_URL}
     restart: on-failure
     links:
       - rabbitmq
@@ -121,6 +123,7 @@ services:
     restart: on-failure
     environment:   
       - CATALOG_URL=${CATALOG_URL}
+      - BASKET_URL=${BASKET_URL}
     networks:
       - sb
     depends_on:
