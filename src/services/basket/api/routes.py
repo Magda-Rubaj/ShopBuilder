@@ -10,8 +10,6 @@ basket_router = router = APIRouter(
     tags=["basket"],
 )
 
-class Model(BaseModel):
-    name: str
 
 @router.post("/add", status_code=201)
 @inject

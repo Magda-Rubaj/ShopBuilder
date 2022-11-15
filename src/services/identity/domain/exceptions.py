@@ -1,0 +1,3 @@
+
+class GuestKeyExistsException(Exception):
+    pass
