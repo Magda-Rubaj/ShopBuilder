@@ -113,6 +113,36 @@ services:
       - rabbitmq
     ports:
       - "5555:5555"
+  
+  identity-guests-store:
+    image: redis:latest
+    command: --port 6377
+    ports:
+      - "6377:6377"
+    expose:
+      - "6377"
+    networks:
+      - sb
+
+  identity:
+    build:
+      context: ./src/services/identity
+      dockerfile: Dockerfile
+    command: python main.py
+    working_dir: /usr/bin/identity
+    restart: on-failure
+    environment:   
+      - REDIS_URL=${IDENTITY_REDIS_URL}
+    links:
+      - rabbitmq
+      - identity-guests-store
+    networks:
+      - sb
+    depends_on:
+      - rabbitmq
+      - identity-guests-store
+    ports:
+      - "5200:5200"
 
   gateway:
     build:

@@ -18,7 +18,7 @@ iam_router = router = APIRouter(
 async def generate_guest_key(
     request: Request, 
     service = Depends(Provide[Container.guest_identity_service]), 
-    settings = Depends(get_settings)
+    settings = Depends(Provide[Container.settings])
 ):  
     key = await service.assign_key()
     response = JSONResponse()
