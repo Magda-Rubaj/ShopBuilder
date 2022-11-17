@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from config.container import Container
 
 
-
 basket_router = router = APIRouter(
     tags=["basket"],
 )

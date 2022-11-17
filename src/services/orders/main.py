@@ -1,21 +1,20 @@
 import asyncio
 
 import aio_pika
-import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 
-from api.routes import test_router
-from config.app import AppConfig
 from config.container import Container
+from config.settings import Settings
 from integration.events import ProductCreated
 
 
-config = AppConfig()
+config = Settings()
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=config.secret_key)
 
-@app.on_event('startup')    
+
+@app.on_event("startup")
 async def main():
     container = Container()
     container.config.from_pydantic(config)
@@ -29,14 +28,3 @@ async def main():
             ProductCreated.__name__, container.product_created_handler()
         )
     )
-
-if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        log_level="debug",
-        reload=True,
-        port=8888,
-    )
-
-

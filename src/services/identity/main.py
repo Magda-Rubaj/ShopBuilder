@@ -1,11 +1,9 @@
-import uvicorn
 from fastapi import FastAPI
-from config.settings import get_settings
 from config.container import Container
+from api.routes import iam_router
 
 
 app = FastAPI()
-settings = get_settings()
+app.include_router(iam_router, prefix="/api")
 container = Container()
-container.config.from_pydantic(settings)
 container.wire(modules=[__name__])

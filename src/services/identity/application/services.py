@@ -12,7 +12,7 @@ class GuestIdentityService:
         while True: 
             guest_key = guest.generate_key()
             try:
-                self.repo.add(guest_key)
+               await self.repo.add(guest_key)
             except GuestKeyExistsException:
                 continue
             finally:

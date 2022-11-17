@@ -21,7 +21,7 @@ services:
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
-    command: python main.py
+    command: flask run --host 0.0.0.0 --port 5300
     working_dir: /usr/bin/catalog
     restart: on-failure
     environment:
@@ -31,12 +31,11 @@ services:
       - AMQP_URL=${AMQP_URL}
     networks:
       - sb
-    links:
-      - rabbitmq
-      - catalog-db
     depends_on:
       - rabbitmq
       - catalog-db
+    ports:
+      - "5300:5300"
 
   orders-db:
     image: mongo:latest
@@ -70,7 +69,7 @@ services:
     build:
       context: ./src/services/orders
       dockerfile: Dockerfile
-    command: python main.py
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 5000
     working_dir: /usr/bin/orders
     restart: on-failure
     environment:   
@@ -78,18 +77,17 @@ services:
       - DB_URL=${ORDERS_DB_URL}
       - DB_NAME=${ORDERS_DB_NAME}
       - AMQP_URL=${AMQP_URL}
-    links:
-      - rabbitmq
-      - orders-db
     networks:
       - sb
     depends_on:
       - rabbitmq
     ports:
-      - "8888:8888"
+      - "5000:5000"
 
   basket-store:
     image: redis:latest
+    volumes: 
+      - basket-store:/redis/data
     ports:
       - 6379:6379
     networks:
@@ -99,24 +97,23 @@ services:
     build:
       context: ./src/services/basket
       dockerfile: Dockerfile
-    command: python main.py
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 5100
     working_dir: /usr/bin/basket
     restart: on-failure
     environment:   
       - REDIS_URL=${BASKET_REDIS_URL}
-    links:
-      - rabbitmq
-      - basket-store
     networks:
       - sb
     depends_on:
       - rabbitmq
     ports:
-      - "5555:5555"
+      - "5100:5100"
   
   identity-guests-store:
     image: redis:latest
     command: --port 6377
+    volumes: 
+      - identity-guests-store:/redis/data
     ports:
       - "6377:6377"
     expose:
@@ -128,14 +125,11 @@ services:
     build:
       context: ./src/services/identity
       dockerfile: Dockerfile
-    command: python main.py
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 5200 
     working_dir: /usr/bin/identity
     restart: on-failure
     environment:   
       - REDIS_URL=${IDENTITY_REDIS_URL}
-    links:
-      - rabbitmq
-      - identity-guests-store
     networks:
       - sb
     depends_on:
@@ -148,11 +142,12 @@ services:
     build:
       context: ./src/gateways
       dockerfile: Dockerfile
-    command: python main.py
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 
     working_dir: /usr/bin/gateway
     restart: on-failure
     environment:   
       - CATALOG_URL=${CATALOG_URL}
+      - BASKET_URL=${BASKET_URL}
     networks:
       - sb
     depends_on:
@@ -177,6 +172,10 @@ volumes:
   catalog-db:
     driver: local
   orders-db:
+    driver: local
+  basket-store:
+    driver: local
+  identity-guests-store:
     driver: local
 
 networks:

@@ -1,6 +1,7 @@
 from dependency_injector import containers, providers
 from config.settings import Settings
-from services.identity.application.services import GuestIdentityService
+from application.services import GuestIdentityService
+from infrastructure.repos import GuestRepository
 
 
 class Container(containers.DeclarativeContainer):
@@ -8,7 +9,7 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(modules=["api.routes", "main"])
     settings = providers.Singleton(Settings)
     guest_repository = providers.Factory(
-        GuestIdentityService, redis=settings.redis_instance
+        GuestRepository, redis=settings.provided.redis_instance
     )
     guest_identity_service = providers.Factory(
         GuestIdentityService, repo=guest_repository

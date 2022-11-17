@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 import aioredis
 from pydantic import BaseSettings, Field
 
@@ -10,4 +8,3 @@ class Settings(BaseSettings):
     @property
     def redis_instance(self):
         return aioredis.from_url(self.redis_url)
-
