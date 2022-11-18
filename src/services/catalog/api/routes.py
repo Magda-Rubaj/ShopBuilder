@@ -33,11 +33,3 @@ def add_category(
     command_mapper.execute_command(command, repo)
     return {201: "OK"}
 
-
-# @product_blueprint.route("/products/test", methods=["POST"])
-# @inject
-# def test(command_mapper: CommandMapper = Provide[Container.command_mapper],
-#     repo: CategoryRepository = Provide[Container.category_repository]):
-#     publisher = RabbitMQEventPublisher(prepare_channel())
-#     repo.insert(Category(name="dsdfsd"))
-#     return "k"

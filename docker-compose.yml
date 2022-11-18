@@ -21,8 +21,10 @@ services:
     build:
       context: ./src/services/catalog
       dockerfile: Dockerfile
-    command: flask run --host 0.0.0.0 --port 5300
+    command: flask --debug run --host 0.0.0.0 --port 5300
     working_dir: /usr/bin/catalog
+    volumes:
+      - ./src/services/catalog:/usr/bin/catalog
     restart: on-failure
     environment:
       - DBNAME=${CATALOG_DBNAME}
@@ -43,6 +45,8 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${ORDERS_DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${ORDERS_DB_PASSWORD}
       - MONGO_INITDB_DATABASE=${ORDERS_DB_NAME}
+    logging:
+      driver: none
     ports:
       - 27017:27017
     volumes:
@@ -71,6 +75,8 @@ services:
       dockerfile: Dockerfile
     command: uvicorn main:app --reload --host 0.0.0.0 --port 5000
     working_dir: /usr/bin/orders
+    volumes:
+      - ./src/services/orders:/usr/bin/orders
     restart: on-failure
     environment:   
       - SECRET_KEY=${ORDERS_SECRET_KEY}
@@ -99,6 +105,8 @@ services:
       dockerfile: Dockerfile
     command: uvicorn main:app --reload --host 0.0.0.0 --port 5100
     working_dir: /usr/bin/basket
+    volumes:
+      - ./src/services/basket:/usr/bin/basket
     restart: on-failure
     environment:   
       - REDIS_URL=${BASKET_REDIS_URL}
@@ -127,6 +135,8 @@ services:
       dockerfile: Dockerfile
     command: uvicorn main:app --reload --host 0.0.0.0 --port 5200 
     working_dir: /usr/bin/identity
+    volumes:
+      - ./src/services/identity:/usr/bin/identity
     restart: on-failure
     environment:   
       - REDIS_URL=${IDENTITY_REDIS_URL}
@@ -144,6 +154,8 @@ services:
       dockerfile: Dockerfile
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 
     working_dir: /usr/bin/gateway
+    volumes:
+      - ./src/gateways:/usr/bin/gateway
     restart: on-failure
     environment:   
       - CATALOG_URL=${CATALOG_URL}
