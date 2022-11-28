@@ -2,7 +2,7 @@ name: identity
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
     paths:
     - "src/services/identity**"
     - ".github/workflows/identity.yaml"

@@ -2,7 +2,7 @@ name: basket
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
     paths:
     - "src/services/basket**"
     - ".github/workflows/basket.yaml"

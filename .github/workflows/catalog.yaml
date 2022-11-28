@@ -2,7 +2,7 @@ name: catalog
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
     paths:
     - "src/services/catalog**"
     - ".github/workflows/catalog.yaml"
