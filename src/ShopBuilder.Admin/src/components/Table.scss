@@ -26,10 +26,20 @@
     th {
       border-bottom: 3px solid #13B799;
       padding-bottom: 0.5em;
+
+      color: #00374F;
     }
 
     td {
       padding-top: 0.5em;
+      color: black;
+    }
+
+    th,td {
+      color: #00374F;
+      font-weight: 400;
+      font-size: 1em;
+      font-family: 'Ubuntu', sans-serif;
     }
 
   }
