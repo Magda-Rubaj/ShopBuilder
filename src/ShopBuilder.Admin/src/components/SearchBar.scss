@@ -1,0 +1,33 @@
+.searchbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  height: 3em;
+
+  &__frame {
+    border: 1px solid #D1D1D1;
+    padding-left: 1em;
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    padding-left: 1em;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+  }
+
+  &__btn {
+    padding: 0.5em 1.5em;
+    background: #13B799;
+    color: #EEEEEE;
+    font-weight: 400;
+    font-size: 1.5em;
+
+    outline: none;
+    border: none;
+    cursor: pointer;
+  }
+}

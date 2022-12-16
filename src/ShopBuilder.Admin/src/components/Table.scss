@@ -1,0 +1,49 @@
+.table {
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px 10px rgba(221, 221, 221, 0.25);
+  border-radius: 17px;
+  padding: 1.5em;
+
+
+  &__controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1em;
+    align-items: center;
+  }
+
+  &__content {
+    overflow-x: auto;
+  }
+
+  &__table {
+    margin-top: 1.5em;
+    width: 100%;
+
+    border-collapse: collapse;
+
+    th {
+      border-bottom: 3px solid #13B799;
+      padding-bottom: 0.5em;
+    }
+
+    td {
+      padding-top: 0.5em;
+    }
+
+  }
+
+
+  &__head, &__body {
+    text-align: left;
+  }
+
+
+  
+
+  &__pagination {
+    margin-top: 2em;
+    text-align: center;
+  }
+}
