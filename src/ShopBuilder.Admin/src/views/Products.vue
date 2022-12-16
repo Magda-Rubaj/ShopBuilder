@@ -4,6 +4,9 @@
       <p class="products__breadcrumb">Catalog / Products</p>
       <BaseHeader>Products</BaseHeader>
     </header>
+    <div class="products__table">
+      <Table/>
+    </div>
 
   </div>
 </template>
@@ -12,5 +15,6 @@
 
 <script lang="ts" setup>
 import BaseHeader from '../components/BaseHeader.vue';
+import Table from '../components/Table.vue';
 
 </script>
