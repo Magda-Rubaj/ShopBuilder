@@ -34,8 +34,10 @@ services:
     networks:
       - sb
     depends_on:
-      - rabbitmq
-      - catalog-db
+      rabbitmq:
+        condition: service_healthy
+      catalog-db:
+        condition: service_started
     ports:
       - "5300:5300"
 
@@ -86,7 +88,8 @@ services:
     networks:
       - sb
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "5000:5000"
 
@@ -113,7 +116,8 @@ services:
     networks:
       - sb
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "5100:5100"
   
@@ -143,8 +147,10 @@ services:
     networks:
       - sb
     depends_on:
-      - rabbitmq
-      - identity-guests-store
+      rabbitmq:
+        condition: service_healthy
+      identity-guests-store:
+        condition: service_started
     ports:
       - "5200:5200"
 
@@ -173,6 +179,8 @@ services:
     image: rabbitmq:3-management-alpine
     logging:
       driver: none
+    healthcheck:
+      test: ["CMD-SHELL", " netstat -an | grep -q 5672"]
     networks:
       - sb
     ports:
