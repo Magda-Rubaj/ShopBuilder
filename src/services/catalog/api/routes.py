@@ -1,35 +1,35 @@
 from application.commands import CreateCategoryCommand, CreateProductCommand, CommandMapper
 from config.container import Container
-from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, request
+from dependency_injector.wiring import Provide, inject, Closing
+from fastapi import APIRouter, status, Depends
 from infrastructure.repos import CategoryRepository, ProductRepository
 from integration.eventbus import EventBus
 
 
-
-product_blueprint = Blueprint("product_blueprint", __name__)
-category_blueprint = Blueprint("category_blueprint", __name__)
+catalog_router = router = APIRouter(tags=["catalog"])
 
 
-@product_blueprint.route("/products/create", methods=["POST"])
+@catalog_router.post("/products/create", status_code=status.HTTP_201_CREATED)
 @inject
 def add_product(
-    command_mapper: CommandMapper = Provide[Container.command_mapper],
-    repo: ProductRepository = Provide[Container.product_repository],
-    publisher: EventBus = Provide[Container.rabbit_publisher],
+    product: dict,
+    command_mapper: CommandMapper = Depends(Provide[Container.command_mapper]),
+    repo: ProductRepository = Depends(Provide[Container.product_repository]),
+    publisher: EventBus = Depends(Closing[Provide[Container.rabbit_publisher]]),
 ):
-    command = CreateProductCommand(**request.json)
+    command = CreateProductCommand(**product)
     command_mapper.execute_command(command, repo, publisher)
-    return {201: "OK"}
+    return {"status": "OK"}
 
 
-@product_blueprint.route("/categories/create", methods=["POST"])
+@catalog_router.post("/categories/create", status_code=status.HTTP_201_CREATED)
 @inject
 def add_category(
-    command_mapper: CommandMapper = Provide[Container.command_mapper],
-    repo: CategoryRepository = Provide[Container.category_repository],
+    category: dict,
+    command_mapper: CommandMapper = Depends(Provide[Container.command_mapper]),
+    repo: CategoryRepository = Depends(Provide[Container.category_repository]),
 ):
-    command = CreateCategoryCommand(**request.json)
+    command = CreateCategoryCommand(**category)
     command_mapper.execute_command(command, repo)
-    return {201: "OK"}
+    return {"status": "OK"}
 

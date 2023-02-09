@@ -2,7 +2,6 @@ import asyncio
 
 import aio_pika
 from fastapi import FastAPI
-from starlette.middleware.sessions import SessionMiddleware
 
 from config.container import Container
 from config.settings import Settings
@@ -11,11 +10,10 @@ from integration.events import ProductCreated
 
 config = Settings()
 app = FastAPI()
-app.add_middleware(SessionMiddleware, secret_key=config.secret_key)
 
 
 @app.on_event("startup")
-async def main():
+async def start():
     container = Container()
     container.config.from_pydantic(config)
     container.wire(modules=[__name__])

@@ -1,8 +1,8 @@
+import os
 from logging.config import fileConfig
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from config.db import Base, db_str
+from config.settings import Base
 
 from alembic import context
 
@@ -17,7 +17,7 @@ if config.config_file_name is not None:
 
 
 target_metadata = [Base.metadata]
-config.set_main_option('sqlalchemy.url', db_str)
+config.set_main_option('sqlalchemy.url', os.environ["DBURL"])
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

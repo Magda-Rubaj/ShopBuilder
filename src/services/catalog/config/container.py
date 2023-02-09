@@ -1,8 +1,7 @@
 from dependency_injector import containers, providers
 from infrastructure.repos import ProductRepository, CategoryRepository
 from application.commands import CommandMapper
-from config.db import get_session
-from config.rabbitmq import prepare_channel
+from config.settings import Settings, get_session, get_channel
 from integration.eventbus import RabbitMQEventBus
 
 
@@ -11,8 +10,11 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=["api.routes"]
     )
-    session = providers.Singleton(get_session)
-    rabbit_channel = providers.Singleton(prepare_channel)
+    settings = providers.Singleton(Settings)
+    session = providers.Singleton(get_session, db_url=settings.provided.DB_URL)
+    rabbit_channel = providers.Resource(
+        get_channel, amqp_url=settings.provided.AMQP_URL
+    )
     command_mapper = providers.Factory(CommandMapper)
     product_repository = providers.Factory(
         ProductRepository, session=session
